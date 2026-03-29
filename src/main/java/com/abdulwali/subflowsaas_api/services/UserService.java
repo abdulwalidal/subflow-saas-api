@@ -9,4 +9,10 @@ public interface UserService {
     UserDTO addUser(User user);
 
     UserResponse getAll();
+
+    UserDTO findUserById(Long userId);
+
+    UserDTO updateUser(UserDTO userDTO, Long userId);
+
+    UserDTO deleteUser(Long userId);
 }
