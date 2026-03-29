@@ -36,5 +36,32 @@ public class UserServiceImpl implements  UserService {
         return userResponse;
     }
 
+    @Override
+    public UserDTO findUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("User not found with this Id: " + userId));
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    public UserDTO updateUser(UserDTO userDTO, Long userId) {
+        //  Finds the existing user by ID; throws Exception if it doesn’t exist.
+        User userFromDb = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User does not exist"));
+
+        User user = modelMapper.map(userDTO, User.class);
+        user.setUserId(userId);
+        userFromDb = userRepository.save(user);
+        return modelMapper.map(userFromDb, UserDTO.class);
+    }
+
+    public UserDTO deleteUser(Long userId) {
+        User userFromDb = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User does not exist"));
+
+        userRepository.delete(userFromDb);
+        return modelMapper.map(userFromDb, UserDTO.class);
+    }
+
 
 }
