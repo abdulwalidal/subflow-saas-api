@@ -13,4 +13,10 @@ public interface SubscriptionService {
     SubscriptionDTO addSubscription(Subscription subscription);
 
     SubscriptionResponse getAll();
+
+    SubscriptionDTO updateSubscription(Long Id, SubscriptionDTO subscriptionDTO);
+
+    SubscriptionDTO deleteSubscription(Long Id);
+
+    SubscriptionDTO findSubscriptionById(Long Id);
 }
