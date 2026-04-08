@@ -1,8 +1,10 @@
 package com.abdulwali.subflowsaas_api.services;
 
 import com.abdulwali.subflowsaas_api.model.Subscription;
+import com.abdulwali.subflowsaas_api.model.User;
 import com.abdulwali.subflowsaas_api.payload.SubscriptionDTO;
 import com.abdulwali.subflowsaas_api.payload.SubscriptionResponse;
+import com.abdulwali.subflowsaas_api.payload.UserDTO;
 import com.abdulwali.subflowsaas_api.repository.SubscriptionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,41 @@ public class SubscriptionServiceImpl implements SubscriptionService {
       SubscriptionResponse subscriptionResponse = new SubscriptionResponse();
       subscriptionResponse.setContent(subscriptionDTOS);
       return subscriptionResponse;
+
+    }
+
+    @Override
+    public SubscriptionDTO updateSubscription(Long Id, SubscriptionDTO subscriptionDTO) {
+        //  Finds the existing user by ID; throws Exception if it doesn’t exist.
+      Subscription subFromDB = subscriptionRepository.findById(Id)
+                .orElseThrow(() -> new RuntimeException("Subscription does not exist"));
+
+      Subscription subscription = modelMapper.map(subscriptionDTO, Subscription.class);
+      subscription.setId(Id);
+      subFromDB = subscriptionRepository.save(subscription);
+      return modelMapper.map(subFromDB, SubscriptionDTO.class);
+
+
+    }
+
+    @Override
+    public SubscriptionDTO deleteSubscription(Long Id) {
+        //  Finds the existing user by ID; throws Exception if it doesn’t exist.
+        Subscription subFromDB = subscriptionRepository.findById(Id)
+                .orElseThrow(() -> new RuntimeException("Subscription does not exist"));
+
+        subscriptionRepository.delete(subFromDB);
+        return modelMapper.map(subFromDB, SubscriptionDTO.class);
+
+    }
+
+    @Override
+    public SubscriptionDTO findSubscriptionById(Long Id) {
+        //  Finds the existing user by ID; throws Exception if it doesn’t exist.
+        Subscription subFromDB = subscriptionRepository.findById(Id)
+                .orElseThrow(() -> new RuntimeException("Subscription does not exist"));
+
+        return modelMapper.map(subFromDB, SubscriptionDTO.class);
 
     }
 }
